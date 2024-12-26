@@ -118,6 +118,52 @@
             </form>
         </div>
     </section>
+    <script>
+        const cart = [];
+        const cartElement = document.createElement('div');
+        cartElement.id = 'cart';
+        cartElement.style = `
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            width: 300px;
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 10px;
+            z-index: 1000;
+        `;
+        document.body.appendChild(cartElement);
+    
+        function updateCart() {
+            const total = cart.reduce((sum, item) => sum + item.price, 0);
+            cartElement.innerHTML = `
+                <h3>Your Cart</h3>
+                <ul>
+                    ${cart.map(item => `<li>${item.name} - Rs.${item.price}</li>`).join('')}
+                </ul>
+                <p><strong>Total: Rs.${total.toFixed(2)}</strong></p>
+            `;
+        }
+    
+        function addToCart(name, price) {
+            cart.push({ name, price });
+            updateCart();
+        }
+    
+        // Attach event listeners to Add to Cart buttons
+        document.querySelectorAll('.product .btn').forEach((button, index) => {
+            button.addEventListener('click', () => {
+                const productElement = button.parentElement;
+                const name = productElement.querySelector('h3').textContent;
+                const price = parseFloat(productElement.querySelector('p').textContent.replace('Rs.', ''));
+                addToCart(name, price);
+            });
+        });
+    
+        updateCart();
+    </script>
 
     <footer>
         <div class="container">
